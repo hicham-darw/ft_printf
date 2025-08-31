@@ -2,7 +2,7 @@
 
 static int	ft_hexlen(long n)
 {
-	int len;
+	int	len;
 
 	if (n == 0)
 		return (1);
@@ -24,8 +24,8 @@ static char	*get_negative_hexa(char	*ptr, long n)
 {
 	char	*hex;
 	char	*tmp;
-	int	i;
-	int	len_ptr;
+	int		i;
+	int		len_ptr;
 
 	hex = ft_strdup("0123456789abcdef");
 	if (!hex)
@@ -48,10 +48,10 @@ char	*get_hexa(long n)
 {
 	char	*hex;
 	char	*ptr;
-	int	len;
+	int		len;
 
 	len = ft_hexlen(n);
-	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	ptr = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	if (!ptr)
 		return (NULL);
 	ptr[len--] = '\0';
@@ -67,7 +67,7 @@ char	*get_hexa(long n)
 		n /= 16;
 	}
 	free (hex);
-	if(n == 0)
+	if (n == 0)
 		return (ptr);
 	return (get_negative_hexa(ptr, n));
 }
