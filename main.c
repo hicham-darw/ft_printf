@@ -3,80 +3,70 @@
 |***libft.h in my libftprintf.h should called "libft/" and in the root of repository***|
 
 ***************************************************************************************/
+#include "libftprintf.h"
 #include <stdio.h>
 #include <limits.h>
+#include <stdlib.h>
 
+// Your ft_printf prototype
 int ft_printf(const char *format, ...);
-
-void *get_pointer() {
-    static int x = 42;
-    return &x;
-}
 
 int main(void)
 {
-    int ret1, ret2;
+    int ret_ft, ret_std;
+    int failures = 0;
+    int i;
 
-    char c = 'A';
-    char *str = "Hello, ft_printf!";
-    char *null_str = NULL;
-    int n = 123456789;
-    int neg = -2147483648; // INT_MIN
-    unsigned int u = 4294967295U; // UINT_MAX
-    unsigned int hex = 0xdeadbeef;
+    char *strings[] = { "Hello", "", NULL, "StressTest123", "LongStringForTesting" };
+    int ints[] = { 0, 1, -1, 42, INT_MAX, INT_MIN };
+    unsigned int uints[] = { 0, 1, 42, UINT_MAX };
+    char chars[] = { 'a', 'Z', '\0' };
 
-    void *ptr = get_pointer();
+    void *pointers[] = { (void*)0, (void*)1, (void*)ints, (void*)&ints[0] };
 
-    printf("\n=== Testing ft_printf with all formats ===\n");
+    for (i = 0; i < 1000; i++)
+    {
+        // Integer
+        ret_ft = ft_printf("Int: %d\n", ints[i % 6]);
+        ret_std = printf("Int: %d\n", ints[i % 6]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %ld
-    ret1 = ft_printf("Char: [%c]\n", c);
-    ret2 =   printf("Char: [%c]\n", c);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
-    // Test %c
-    ret1 = ft_printf("Char: [%c]\n", c);
-    ret2 = printf("Char: [%c]\n", c);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
-    // Test %%
-    ret1 = ft_printf("Percent: [%%]\n");
-    ret2 = printf("Percent: [%%]\n");
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // Unsigned
+        ret_ft = ft_printf("Unsigned: %u\n", uints[i % 4]);
+        ret_std = printf("Unsigned: %u\n", uints[i % 4]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %s
-    ret1 = ft_printf("String: [%s]\n", str);
-    ret2 = printf("String: [%s]\n", str);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // Hex
+        ret_ft = ft_printf("Hex lowercase: %x\n", uints[i % 4]);
+        ret_std = printf("Hex lowercase: %x\n", uints[i % 4]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test NULL string
-    ret1 = ft_printf("Null string: [%s]\n", null_str);
-    ret2 = printf("Null string: [%s]\n", null_str);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        ret_ft = ft_printf("Hex uppercase: %X\n", uints[i % 4]);
+        ret_std = printf("Hex uppercase: %X\n", uints[i % 4]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %d and %i
-    ret1 = ft_printf("Int: [%d], Negative: [%i], INT_MAX: [%d], INT_MIN: [%i]\n", n, neg, INT_MAX, INT_MIN);
-    ret2 = printf("Int: [%d], Negative: [%i], INT_MAX: [%d], INT_MIN: [%i]\n", n, neg, INT_MAX, INT_MIN);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // Char
+        ret_ft = ft_printf("Char: %c\n", chars[i % 3]);
+        ret_std = printf("Char: %c\n", chars[i % 3]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %u
-    ret1 = ft_printf("Unsigned: [%u], Zero: [%u]\n", u, 0);
-    ret2 = printf("Unsigned: [%u], Zero: [%u]\n", u, 0);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // String
+        ret_ft = ft_printf("String: %s\n", strings[i % 5]);
+        ret_std = printf("String: %s\n", strings[i % 5]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %x and %X
-    ret1 = ft_printf("Hex lowercase: [%x], Hex uppercase: [%X]\n", hex, hex);
-    ret2 = printf("Hex lowercase: [%x], Hex uppercase: [%X]\n", hex, hex);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // Pointer
+        ret_ft = ft_printf("Pointer: %p\n", pointers[i % 4]);
+        ret_std = printf("Pointer: %p\n", pointers[i % 4]);
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
 
-    // Test %p
-    ret1 = ft_printf("Pointer: [%p], NULL pointer: [%p]\n", ptr, NULL);
-    ret2 = printf("Pointer: [%p], NULL pointer: [%p]\n", ptr, NULL);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
+        // Percent
+        ret_ft = ft_printf("Percent: %%\n");
+        ret_std = printf("Percent: %%\n");
+        if (ret_ft != ret_std) { printf("FAIL #%d: ret_ft=%d | ret_std=%d\n", i+1, ret_ft, ret_std); failures++; }
+    }
 
-    // Mixed all together
-    ret1 = ft_printf("Mixed: [%c][%s][%d][%i][%u][%x][%X][%p][%%]\n", c, str, n, neg, u, hex, hex, ptr);
-    ret2 = printf("Mixed: [%c][%s][%d][%i][%u][%x][%X][%p][%%]\n", c, str, n, neg, u, hex, hex, ptr);
-    printf("Return: ft_printf=%d, printf=%d\n\n", ret1, ret2);
-
+    printf("Total tests: %d | Failures: %d\n", 1000*8, failures);
     return 0;
 }
 
