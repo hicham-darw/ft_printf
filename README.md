@@ -73,6 +73,6 @@ Once you’re done, submit your work to your Git repository. Double-check that a
 
 Congratulations! With `ft_printf` added to your toolkit, you’re one step closer to mastering C programming. 🎉💻
 
-## Leave a strar :star:!
+## See You :star:!
 
 If you'd like to see an in-depth analisy of this code, leave a star to let us know! :love_letter:
