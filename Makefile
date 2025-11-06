@@ -1,23 +1,30 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-SRCS = ft_count_len.c ft_strcat_format.c ft_printf.c get_hexa.c ft_strcat_one_char.c
-OBJS = $(patsubst %.c, %.o, $(SRCS))
-NAME = libftprintf.a
-LIBFT = libft.a
 
-$(NAME): $(LIBFT) $(OBJS)
-	ar rcs $(NAME) libft/$(LIBFT) $(OBJS)
-$(LIBFT):
-	make -C libft/
-%.o:%.c $(FILES)
-	$(CC) $(CFLAGS) -c $< -o $@ -I libft/includes -I. 
+CFLAGS = -Wall -Wextra -Werror
+
+NAME = libftprintf.a
+
+HEADER = libftprintf.h
+
+SRCS = ft_address_cat.c ft_memset.c ft_strlen.c ft_itoa.c ft_charcat.c ft_decimal_cat.c ft_get_string.c ft_hexadecimal_cat.c \
+       ft_printf.c ft_strcat.c ft_uitoa.c get_len_printf.c printf_not_completed.c len_hexa.c
+
+OBJS = $(SRCS:.c=.o)
+
 all: $(NAME)
-clean:
-	make -C libft/ clean
+
+$(NAME): $(OBJS)
+
+%.o:%.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
+	ar rcs $(NAME) $@
+
+clean: 
 	rm -f $(OBJS)
+
 fclean: clean
-	make -C libft/ fclean
 	rm -f $(NAME)
+
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: clean
