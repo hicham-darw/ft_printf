@@ -3,40 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-hamo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hel-hamo <hel-hamo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 16:18:02 by hel-hamo          #+#    #+#             */
-/*   Updated: 2025/11/06 01:43:30 by hel-hamo         ###   ########.fr       */
+/*   Created: 2025/11/13 21:22:17 by hel-hamo          #+#    #+#             */
+/*   Updated: 2025/11/25 11:26:34 by hel-hamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
-#include <stdio.h>
+
+int	ft_put_everything(va_list list, const char *s, int *ret)
+{
+	t_flags	flags;
+
+	while (*s)
+	{
+		i = 0;
+		if (*s == '%')
+		{
+			s = ft_initial_flags(++s, &flags);
+			if (!s)
+				return (0);
+			ft_putargs(list, flags, *s, ret);
+
+		}
+		else
+			*ret += write(1, s, 1);
+		s++;
+	}
+	return (1);
+}
 
 int	ft_printf(const char *s, ...)
 {
-	va_list	args;
-	va_list	tmp_args;
+	va_list	list;
 	int		ret;
-	char	*string;
 
-	if (!s)
+	if (!s || write(1, "", 0) < 0)
 		return (-1);
-	va_start(args, s);
-	va_copy(tmp_args, args);
-	ret = get_len_printf(s, tmp_args);
-	va_end(tmp_args);
-	string = (char *)malloc(sizeof(char *) * (ret + 1));
-	if (!string)
-		return (-1);
-	ft_memset(string, 0, ret + 1);
-	if (!ft_get_string(string, s, args))
+	va_start(list, s);
+	ret = 0;
+	if (!ft_put_everything(list, s, &ret))
 	{
-		va_end(args);
+		va_end(list);
 		return (-1);
 	}
-	va_end(args);
-	ret = write(1, string, ft_strlen(string));
-	free(string);
+	va_end(list);
 	return (ret);
 }
