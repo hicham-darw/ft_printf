@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-hamo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hel-hamo <hel-hamo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 11:33:16 by hel-hamo          #+#    #+#             */
-/*   Updated: 2025/11/25 11:35:20 by hel-hamo         ###   ########.fr       */
+/*   Updated: 2025/11/28 01:31:38 by hel-hamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-
+#include "libftprintf.h"
 
 int	main()
 {
-	printf("%-.07d\n", 42);
+	ft_printf("%#7d\n", 42);
+	printf("|%+030d|", 42);
 }
